@@ -27,7 +27,9 @@ class BlazorDualMode {
         }
         console.log(`Using script: ${source}`);
         await import(source);
+        console.log("script imported");
         window.Blazor.start();
+        console.log("Blazor started");
     }
     // Called from C#
     LoadClient() {
