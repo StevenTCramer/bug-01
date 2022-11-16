@@ -1,9 +1,4 @@
 namespace Pwa;
-
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-
 public class Program
 {
   public static void Main(string[] args)
@@ -26,6 +21,7 @@ public class Program
   {
     serviceCollection.AddRazorPages();
     serviceCollection.AddServerSideBlazor();
+
     Pwa.Client.Program.ConfigureServices(serviceCollection, configuration);
   }
 
