@@ -10,7 +10,6 @@ public class Program
   {
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-    // Add services to the container.
     ConfigureServices(builder.Services, builder.Configuration);
 
     WebApplication webApplication = builder.Build();
