@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 
 namespace Pwa;
 
@@ -10,10 +11,7 @@ public class Program
     var builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
-
-    builder.Services.AddControllersWithViews();
-    builder.Services.AddRazorPages();
-    builder.Services.AddServerSideBlazor();
+    ConfigureServices(builder.Services, builder.Configuration);
 
     var app = builder.Build();
 
@@ -43,5 +41,13 @@ public class Program
     app.MapFallbackToPage("/_Host");
 
     app.Run();
+  }
+
+  private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
+  {
+    services.AddControllersWithViews();
+    services.AddRazorPages();
+    services.AddServerSideBlazor();
+    Pwa.Client.Program.ConfigureServices(services, configuration);
   }
 }
