@@ -8,39 +8,47 @@ public class Program
 {
   public static void Main(string[] args)
   {
-    var builder = WebApplication.CreateBuilder(args);
+    WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
     ConfigureServices(builder.Services, builder.Configuration);
 
-    var app = builder.Build();
+    WebApplication webApplication = builder.Build();
 
+    ConfigureMiddleware(webApplication);
+    ConfigureEndpoints(webApplication);
+
+    webApplication.Run();
+  }
+
+  private static void ConfigureEndpoints(WebApplication webApplication)
+  {
+    webApplication.MapRazorPages();
+    webApplication.MapControllers();
+    webApplication.MapBlazorHub();
+    webApplication.MapFallbackToPage("/_Host");
+  }
+
+  private static void ConfigureMiddleware(WebApplication webApplication)
+  {
     // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+    if (webApplication.Environment.IsDevelopment())
     {
-      app.UseWebAssemblyDebugging();
+      webApplication.UseWebAssemblyDebugging();
     }
     else
     {
-      app.UseExceptionHandler("/Error");
+      webApplication.UseExceptionHandler("/Error");
       // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-      app.UseHsts();
+      webApplication.UseHsts();
     }
 
-    app.UseHttpsRedirection();
+    webApplication.UseHttpsRedirection();
 
-    app.UseBlazorFrameworkFiles();
-    app.UseStaticFiles();
+    webApplication.UseBlazorFrameworkFiles();
+    webApplication.UseStaticFiles();
 
-    app.UseRouting();
-
-
-    app.MapRazorPages();
-    app.MapControllers();
-    app.MapBlazorHub();
-    app.MapFallbackToPage("/_Host");
-
-    app.Run();
+    webApplication.UseRouting();
   }
 
   private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
