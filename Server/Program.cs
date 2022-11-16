@@ -1,8 +1,8 @@
+namespace Pwa;
+
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
-
-namespace Pwa;
 
 public class Program
 {
@@ -15,10 +15,31 @@ public class Program
 
     WebApplication webApplication = builder.Build();
 
+    Console.WriteLine($"EnvironmentName: {webApplication.Environment.EnvironmentName}");
+
     ConfigureMiddleware(webApplication);
     ConfigureEndpoints(webApplication);
 
     webApplication.Run();
+  }
+
+  private static void ConfigureServices(IServiceCollection serviceCollection, IConfiguration configuration)
+  {
+    serviceCollection.AddRazorPages();
+    serviceCollection.AddServerSideBlazor();
+    Pwa.Client.Program.ConfigureServices(serviceCollection, configuration);
+  }
+
+  private static void ConfigureMiddleware(WebApplication webApplication)
+  {
+    if (webApplication.Environment.IsDevelopment())
+    {
+      webApplication.UseWebAssemblyDebugging();
+    }
+
+    webApplication.UseBlazorFrameworkFiles();
+    webApplication.UseStaticFiles();
+    webApplication.UseRouting();
   }
 
   private static void ConfigureEndpoints(WebApplication webApplication)
@@ -27,35 +48,5 @@ public class Program
     webApplication.MapControllers();
     webApplication.MapBlazorHub();
     webApplication.MapFallbackToPage("/_Host");
-  }
-
-  private static void ConfigureMiddleware(WebApplication webApplication)
-  {
-    // Configure the HTTP request pipeline.
-    if (webApplication.Environment.IsDevelopment())
-    {
-      webApplication.UseWebAssemblyDebugging();
-    }
-    else
-    {
-      webApplication.UseExceptionHandler("/Error");
-      // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-      webApplication.UseHsts();
-    }
-
-    webApplication.UseHttpsRedirection();
-
-    webApplication.UseBlazorFrameworkFiles();
-    webApplication.UseStaticFiles();
-
-    webApplication.UseRouting();
-  }
-
-  private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
-  {
-    services.AddControllersWithViews();
-    services.AddRazorPages();
-    services.AddServerSideBlazor();
-    Pwa.Client.Program.ConfigureServices(services, configuration);
   }
 }
