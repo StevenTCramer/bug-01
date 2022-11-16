@@ -1,0 +1,14 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: bug
+services:
+    
+- name: web-server
+  project: ../../Server/Pwa.Server.csproj
+  bindings:
+  - port: 7001
+    protocol: https
