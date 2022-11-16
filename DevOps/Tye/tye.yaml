@@ -8,7 +8,7 @@ name: bug
 services:
     
 - name: web-server
-  project: ../../Server/Pwa.Server.csproj
+  project: ../../Source/Server/Pwa.Server.csproj
   bindings:
   - port: 7001
     protocol: https
